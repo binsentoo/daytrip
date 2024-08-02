@@ -37,7 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'passenger_driver_matching',
+    'passenger_driver_matching.apps.DaytripConfig',
 ]
 
 MIDDLEWARE = [
