@@ -1,0 +1,94 @@
+/* color variables (palette from online) */
+:root {
+  --c-white: #ffffff;
+  --c-white-soft: #f8f8f8;
+
+  --c-black: #181818;
+  --c-black-soft: #222222;
+
+  --c-light-pink: #ffcbcb;
+  --c-salmon: #ffb5b5;
+  --c-dark-blue: #407088;
+  --c-cyan-blue: #132743;
+}
+
+/* semantic color variables (light) */
+:root {
+  --color-background: var(--c-dark-blue);
+  --color-background-soft: var(--c-white-soft);
+  --color-heading: var(--c-dark-blue);
+  --color-text: var(--c-salmon);
+  --color-subtext: var(--c-light-pink);
+}
+
+header {
+  background: var(--color-background);
+  color: var(--color-text);
+  font-family:
+    Inter,
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    Roboto,
+    Oxygen,
+    Ubuntu,
+    Cantarell,
+    'Fira Sans',
+    'Droid Sans',
+    'Helvetica Neue',
+    sans-serif;
+  font-size: 30px;
+}
+
+body {
+  background: var(--color-background-soft);
+  margin: 0;
+}
+
+/* can implement later once design is finalized */
+/*
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-background: var(--vt-c-white);
+    --color-background-soft: var(--vt-c-white-soft);
+    --color-heading: var(--vt-c-text-light-1);
+    --color-text: var(--c-dark-blue);
+  }
+}
+*/
+
+/*
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  font-weight: normal;
+}
+
+body {
+  min-height: 100vh;
+  color: var(--color-text);
+  background: var(--color-background);
+  transition:
+    color 0.5s,
+    background-color 0.5s;
+  line-height: 1.6;
+  font-family:
+    Inter,
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    Roboto,
+    Oxygen,
+    Ubuntu,
+    Cantarell,
+    'Fira Sans',
+    'Droid Sans',
+    'Helvetica Neue',
+    sans-serif;
+  font-size: 15px;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}*/
