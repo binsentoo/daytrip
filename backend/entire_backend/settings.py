@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'passenger_cluster',
+    'webpack_loader'
 ]
 
 MIDDLEWARE = [
@@ -56,7 +57,7 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
-            os.path.join(BASE_DIR, 'dist')
+            str(BASE_DIR.joinpath('templates'))
         ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -127,3 +128,14 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+WEBPACK_LOADER = {
+    'DEFAULT': {
+        'BUNDLE_DIR_NAME': 'webpack_bundles/',
+        'CACHE': not DEBUG,
+        'STATS_FILE': os.path.join(BASE_DIR, 'webpack-stats.json'),
+        'POLL_INTERVAL': 0.1,
+        'IGNORE': [r'.+\.hot-update.js', r'.+\.map'],
+        'TIMEOUT': None,
+    }
+}
