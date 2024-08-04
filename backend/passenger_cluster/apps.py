@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class DaytripConfig(AppConfig):
+class PassengerClusterConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'daytrip'
+    name = 'passenger_cluster'
