@@ -1,26 +1,8 @@
-/* color variables (palette from online) */
-:root {
-  --c-white: #ffffff;
-  --c-white-soft: #f8f8f8;
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-  --c-black: #181818;
-  --c-black-soft: #222222;
-
-  --c-light-pink: #ffcbcb;
-  --c-salmon: #ffb5b5;
-  --c-dark-blue: #407088;
-  --c-cyan-blue: #132743;
-}
-
-/* semantic color variables (light) */
-:root {
-  --color-background: var(--c-dark-blue);
-  --color-background-soft: var(--c-white-soft);
-  --color-heading: var(--c-dark-blue);
-  --color-text: var(--c-salmon);
-  --color-subtext: var(--c-light-pink);
-}
-
+/*
 header {
   background: var(--color-background);
   color: var(--color-text);

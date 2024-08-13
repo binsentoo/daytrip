@@ -1,68 +1,48 @@
 <script setup>
+  import { ref } from 'vue'
+  import {
+    Listbox,
+    ListboxButton,
+    ListboxOptions,
+    ListboxOption,
+  } from '@headlessui/vue'
 
+  const people = [
+    { id: 1, name: 'Durward Reynolds', unavailable: false },
+    { id: 2, name: 'Kenton Towne', unavailable: false },
+    { id: 3, name: 'Therese Wunsch', unavailable: false },
+    { id: 4, name: 'Benedict Kessler', unavailable: true },
+    { id: 5, name: 'Katelyn Rohan', unavailable: false },
+  ]
+  const selectedPerson = ref(people[0])
 </script>
 
 <template>
-  <header>
-    <img src="./assets/vacation.jpeg" alt="DayTrip 'Icon'" id="logo" width="200" height="200">
-    <h1>DayTrip!</h1>
-    <div class="buttons">
-      <button id="bleft" @click="createPlan">Create Plan</button>
-      <button id="bright" @click="joinPlan">Join Plan</button>
+  <div class="bg-slate-200 flex flex-col h-screen">
+    <header class="bg-yellow-200 shadow-xl hover:shadow-2xl text-center font-serif text-4xl p-3">
+      DayTrip!
+    </header>
+    <main class="pb-20 text-center bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 shadow-inline">
+      <div class="bg-white inline-block mt-16 rounded-lg shadow-2xl">
+        <div>
+          <img class="mx-auto p-7 pb-2" src="./assets/vacation.jpeg" alt="DayTrip 'Icon'" width="250" height="250">
+        </div>
+        <div class="flex items-center justify-center mt-6 gap-x-6 pb-5">
+          <button class="rounded-md p-2.5 text-white bg-sky-500 hover:bg-sky-700" @click="createPlan">Create Plan</button>
+          <button class="rounded-md p-2.5 text-white bg-violet-500 hover:bg-violet-700" @click="joinPlan">Join Plan</button>
+        </div>
+      </div>
+    </main>
+    <body class="p-10 font-sans bg-sky-300 flex flex-grow">
+        <p>[BIO] Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+      In augue libero, venenatis quis enim nec, tempor pharetra ipsum. 
+      Suspendisse aliquet erat id neque sagittis, sit amet bibendum nunc 
+      consequat. Praesent at diam ligula. Curabitur et laoreet turpis. 
+      Curabitur suscipit purus eget libero volutpat blandit. Nulla a 
+      laoreet libero. Vestibulum eget libero sollicitudin, iaculis enim 
+      sit amet, eleifend odio. Nam pellentesque varius lorem, ut rutrum 
+      purus vulputate ut. Sed in nunc nec odio sagittis maximus ut at tortor. 
+      Fusce pretium sapien eget bibendum fringilla. </p>
+    </body>
   </div>
-  </header>
-  <main>
-    <p id="bio"> [BIO] Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-    In augue libero, venenatis quis enim nec, tempor pharetra ipsum. 
-    Suspendisse aliquet erat id neque sagittis, sit amet bibendum nunc 
-    consequat. Praesent at diam ligula. Curabitur et laoreet turpis. 
-    Curabitur suscipit purus eget libero volutpat blandit. Nulla a 
-    laoreet libero. Vestibulum eget libero sollicitudin, iaculis enim 
-    sit amet, eleifend odio. Nam pellentesque varius lorem, ut rutrum 
-    purus vulputate ut. Sed in nunc nec odio sagittis maximus ut at tortor. 
-    Fusce pretium sapien eget bibendum fringilla. </p>
-  </main>
 </template>
-
-<style scoped>
-
-#logo {
-  display: block;
-  margin: 0 auto 0;
-  max-width: 50%;
-  height: auto;
-}
-
-#bio {
-  margin-left: 2em;
-  margin-right: 2em;
-}
-
-header {
-  margin: 0;
-  padding-top: 2em;
-}
-
-h1 {
-  margin: 0;
-  text-align: center;
-  padding-top: .25em;
-  padding-bottom: .5em;
-}
-
-.buttons {
-  display: flex;
-  justify-content: center;
-}
-
-#bleft {
-  margin: 0 2em 3em auto;
-  color: rgb(60, 109, 109);
-}
-
-#bright {
-  margin: 0 auto 3em 2em;
-  color: rgb(141, 255, 255);
-}
-
-</style>
