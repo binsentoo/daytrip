@@ -1,20 +1,4 @@
 <script setup>
-  import { ref } from 'vue'
-  import {
-    Listbox,
-    ListboxButton,
-    ListboxOptions,
-    ListboxOption,
-  } from '@headlessui/vue'
-
-  const people = [
-    { id: 1, name: 'Durward Reynolds', unavailable: false },
-    { id: 2, name: 'Kenton Towne', unavailable: false },
-    { id: 3, name: 'Therese Wunsch', unavailable: false },
-    { id: 4, name: 'Benedict Kessler', unavailable: true },
-    { id: 5, name: 'Katelyn Rohan', unavailable: false },
-  ]
-  const selectedPerson = ref(people[0])
 </script>
 
 <template>
@@ -25,7 +9,7 @@
     <main class="pb-20 text-center bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 shadow-inline">
       <div class="bg-white inline-block mt-16 rounded-lg shadow-2xl">
         <div>
-          <img class="mx-auto p-7 pb-2" src="./assets/vacation.jpeg" alt="DayTrip 'Icon'" width="250" height="250">
+          <img class="mx-auto p-7 pb-2" src="/static/vue/assets/vacation.jpeg" alt="DayTrip 'Icon'" width="250" height="250">
         </div>
         <div class="flex items-center justify-center mt-6 gap-x-6 pb-5">
           <button class="rounded-md p-2.5 text-white bg-sky-500 hover:bg-sky-700" @click="createPlan">Create Plan</button>
