@@ -38,7 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'passenger_cluster',
-    'webpack_loader'
+    'webpack_loader',
+    'accounts'
 ]
 
 MIDDLEWARE = [
@@ -71,7 +72,7 @@ TEMPLATES = [
     },
 ]
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'dist', 'static'),
+    #os.path.join(BASE_DIR, 'dist', 'static'),
 ]
 
 WSGI_APPLICATION = 'entire_backend.wsgi.application'
@@ -123,6 +124,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
 STATIC_URL = 'static/'
+
+AUTH_USER_MODEL = 'accounts.User'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
