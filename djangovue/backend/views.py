@@ -4,3 +4,6 @@ from django.shortcuts import render
 # Create your views here.
 def home(request): 
   return HttpResponse(render(request, 'vue_index.html'))
+
+def login(request): 
+  return HttpResponse(render(request, 'login.html'))
