@@ -18,8 +18,10 @@ from django.contrib import admin
 from django.urls import path, include
 from backend import views
 
+# make sure the order is the same
 vue_urls = [
   path('', views.home),
+  path('login/', views.login)
 ]
 
 urlpatterns = [
