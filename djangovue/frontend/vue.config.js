@@ -1,6 +1,7 @@
 const { defineConfig } = require('@vue/cli-service')
 const pages = {  
-  index: "src/main.js",  
+  index: "src/js/main.js",
+  login: "src/js/login.js"
 };  
   
 module.exports = {  
