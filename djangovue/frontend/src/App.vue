@@ -1,11 +1,11 @@
 <script setup>
+import HeaderComp from './components/HeaderComp.vue';
+
 </script>
 
 <template>
   <div class="bg-slate-200 flex flex-col h-screen">
-    <header class="bg-yellow-200 shadow-xl hover:shadow-2xl text-center font-serif text-4xl p-3">
-      DayTrip!
-    </header>
+    <HeaderComp name="wow" />
     <main class="pb-20 text-center bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 shadow-inline">
       <div class="bg-white inline-block mt-16 rounded-lg shadow-2xl">
         <div>
@@ -21,8 +21,8 @@
         </div>
       </div>
     </main>
-    <body class="p-10 font-sans bg-sky-300 flex flex-grow">
-        <p>[BIO] Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+    <div class="p-10 font-sans bg-sky-300 flex flex-grow">
+      <p>[BIO] Lorem ipsum dolor sit amet, consectetur adipiscing elit.
       In augue libero, venenatis quis enim nec, tempor pharetra ipsum. 
       Suspendisse aliquet erat id neque sagittis, sit amet bibendum nunc 
       consequat. Praesent at diam ligula. Curabitur et laoreet turpis. 
@@ -31,6 +31,6 @@
       sit amet, eleifend odio. Nam pellentesque varius lorem, ut rutrum 
       purus vulputate ut. Sed in nunc nec odio sagittis maximus ut at tortor. 
       Fusce pretium sapien eget bibendum fringilla. </p>
-    </body>
+      </div>
   </div>
 </template>

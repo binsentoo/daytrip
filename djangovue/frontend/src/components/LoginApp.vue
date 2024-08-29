@@ -1,4 +1,5 @@
 <template>
+  <HeaderComp name="ok"></HeaderComp>
   <div :style="backgroundStyle">
     <h1 :class="h1Class">Good {{ timeOfDay }}!</h1>
     
@@ -44,7 +45,11 @@
 </template>
 
 <script>
+import HeaderComp from './HeaderComp.vue';
 export default {
+  components: {
+      HeaderComp
+  },
   data() {
     return {
       timeOfDay: '',
@@ -57,6 +62,22 @@ export default {
         address: true
       }
     };
+  },
+  mounted() {
+    if (localStorage.firstName) {
+      this.firstName = localStorage.firstName;
+    }
+    if (localStorage.lastName) {
+      this.lastName = localStorage.lastName;
+    }
+  },
+  watch: {
+    firstName(newName) {
+      localStorage.firstName = newName;
+    },
+    lastName(newName) {
+      localStorage.lastName = newName;
+    },
   },
   computed: {
     backgroundStyle() {
@@ -127,11 +148,6 @@ export default {
 </script>
 
 <style scoped>
-html, body {
-  margin: 0;
-  padding: 0;
-  height: 100%;
-}
 
 div {
   display: flex;
