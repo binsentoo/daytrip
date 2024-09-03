@@ -37,8 +37,7 @@
 
     <button 
       class="rounded-md p-2.5 text-white bg-sky-500 hover:bg-sky-700 text-bold" 
-      @click="Submit"
-    >
+      @click="submit">
       Start The Adventures
     </button>
   </div>
@@ -143,7 +142,7 @@ export default {
   },
   created() {
     this.updateTimeOfDay();
-  }
+  },
 };
 </script>
 
