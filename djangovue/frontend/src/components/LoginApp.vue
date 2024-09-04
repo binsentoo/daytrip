@@ -35,10 +35,8 @@
       <a href="#" :class="linkClass">Currently at home? Click here.</a>
     </div>
 
-    <button 
-      class="rounded-md p-2.5 text-white bg-sky-500 hover:bg-sky-700 text-bold" 
-      @click="Submit"
-    >
+    <button class="rounded-md p-2.5 text-white bg-sky-500 hover:bg-sky-700 text-bold" 
+    @click="submitInfo">
       Start The Adventures
     </button>
   </div>
@@ -139,11 +137,15 @@ export default {
     },
     validateField(field) {
       this.validFields[field] = !!this[field];
+    },
+    submitInfo() {
+      console.log("test")
+      alert('It works!')
     }
   },
   created() {
     this.updateTimeOfDay();
-  }
+  },
 };
 </script>
 
