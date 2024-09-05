@@ -7,7 +7,9 @@
         </button>
       </div>
       <ul>
-        <li v-for="name in names" :key="name"> {{ name }} </li>
+        <li v-for="name in names" :key="name"> 
+          <p class="hover:text-red-400 hover:line-through inline-block" @click="deletePerson(name)"> {{ name }}</p>
+        </li>
       </ul>
       <div v-if="invitePerson" class="flex justify-between">
         <div>
@@ -46,7 +48,12 @@
         this.invitePerson = false
       },
       cancelPerson() {
+        this.personName = ""
         this.invitePerson = false
+      },
+      deletePerson(name) {
+        const index = this.names.indexOf(name)
+        this.names.splice(index, 1)
       }
     }
   }
