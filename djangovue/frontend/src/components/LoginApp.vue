@@ -44,6 +44,7 @@
 
 <script>
 import HeaderComp from './HeaderComp.vue';
+import axios from 'axios';
 export default {
   components: {
       HeaderComp
@@ -138,9 +139,21 @@ export default {
     validateField(field) {
       this.validFields[field] = !!this[field];
     },
-    submitInfo() {
-      console.log("test")
-      alert('It works!')
+    async submitInfo() {
+      console.log("test");
+      alert('It works!');
+      try{
+      const response = await axios.post('http://127.0.0.1:8000/adduser/',{
+            "first_name": this.firstName,
+            "password": "null",
+            "username": "null",
+            "last_name": this.lastName,
+            "email": "null@gmail.com",
+            "address": this.address});
+      }
+      catch (error) {
+        console.log(error.response.data);
+      }
     }
   },
   created() {
