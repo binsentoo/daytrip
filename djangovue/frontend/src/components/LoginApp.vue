@@ -143,17 +143,15 @@ export default {
       console.log("test");
       alert('It works!');
       try{
-      const response = await axios.post('http://127.0.0.1:8000/adduser/',{
-            "first_name": this.firstName,
-            "password": "null",
-            "username": "null",
-            "last_name": this.lastName,
-            "email": "null@gmail.com",
-            "address": this.address});
+      await axios.post('/adduser/',{
+            "fname": this.firstName, //asd
+            "lname": this.lastName, //asdasd
+            "address": this.address});//asd asd
       }
       catch (error) {
         console.log(error.response.data);
       }
+
     }
   },
   created() {
