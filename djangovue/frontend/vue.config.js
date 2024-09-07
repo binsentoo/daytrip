@@ -6,9 +6,9 @@ const pages = {
   
 module.exports = {  
   transpileDependencies: true,
-  publicPath: "/static/vue/",
-  outputDir: "./build/static/vue/",
-  indexPath: "../../templates/vue_index.html",
+  publicPath: "/dist",
+  outputDir: "dist",
+  indexPath: "index.html",
   
   pages: pages,  
   
