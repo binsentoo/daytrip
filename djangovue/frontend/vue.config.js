@@ -6,7 +6,9 @@ const pages = {
   
 module.exports = {  
   transpileDependencies: true,
-  publicPath: "/dist",
+  publicPath: process.env.NODE_ENV === 'production'
+    ? '/production-sub-path/'
+    : '/dist',
   outputDir: "dist",
   indexPath: "index.html",
   
