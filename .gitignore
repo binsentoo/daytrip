@@ -223,3 +223,4 @@ yarn-error.log
 
 staticfiles/
 .vercel
+output.css
