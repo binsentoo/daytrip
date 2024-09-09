@@ -3,7 +3,7 @@ import HeaderComp from './components/HeaderComp.vue';
 export default {
   data() {
     return {
-      publicPath: process.env.BASE_URL
+      publicPath: import.meta.env.BASE_URL
     }
   },
   components: {
@@ -18,7 +18,7 @@ export default {
     <main class="pb-20 text-center bg-gradient-to-r from-yellow-300 via-orange-400 to-yellow-300 shadow-inline">
       <div class="bg-white inline-block mt-16 rounded-lg shadow-2xl">
         <div>
-          <img class="mx-auto p-7 pb-2" src="../public/assets/vacation.jpeg" alt="DayTrip 'Icon'" width="250" height="250">
+          <img class="mx-auto p-7 pb-2" src="/assets/vacation.jpeg" alt="DayTrip 'Icon'" width="250" height="250">
         </div>
         <div class="flex items-center justify-center mt-6 gap-x-6 pb-5">
           <button class="rounded-md p-2.5 text-white bg-yellow-500 hover:bg-yellow-700" @click="createPlan">
