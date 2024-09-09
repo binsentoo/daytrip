@@ -25,7 +25,7 @@ export default {
             <a href="/login/">Create Plan</a>
           </button>
           <button class="rounded-md p-2.5 text-white bg-orange-500 hover:bg-orange-700" @click="joinPlan">
-            <a href="/login">Join Plan</a>
+            <a href="/login/">Join Plan</a>
           </button>
         </div>
       </div>
