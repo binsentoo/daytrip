@@ -82,7 +82,7 @@ export default {
     backgroundStyle() {
       const backgroundImage = this.getBackgroundImage();
       return {
-        backgroundImage: `url('/dist/assets/${backgroundImage}')`,
+        backgroundImage: `url('/assets/${backgroundImage}')`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',
