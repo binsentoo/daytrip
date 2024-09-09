@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "tailwindcss -i src/css/input.css -o src/css/output.css --minify && vue-cli-service build && serve -s dist",
+    "build": "tailwindcss -i src/css/input.css -o src/css/output.css --minify && vue-cli-service build",
     "dev": "vite",
     "lint": "vue-cli-service lint",
     "watch": "tailwindcss -i src/css/input.css -o src/css/output.css --watch && vue-cli-service build --watch --mode development",
