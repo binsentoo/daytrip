@@ -10,5 +10,3 @@ python3.12 manage.py collectstatic --no-input
 
 # Apply any outstanding database migrations
 python3.12 manage.py migrate
-
-python3.12 -m gunicorn backend.asgi:application -k uvicorn.workers.UvicornWorker
