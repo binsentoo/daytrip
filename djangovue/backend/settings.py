@@ -38,7 +38,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'passenger_cluster',
     'accounts',
+    'rest_framework',
+    'trip_manager',
 ]
 
 MIDDLEWARE = [
@@ -123,7 +126,7 @@ USE_TZ = True
 
 STATIC_URL = 'dist/'
 
-AUTH_USER_MODEL = 'accounts.User'
+AUTH_USER_MODEL = 'auth.User'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field

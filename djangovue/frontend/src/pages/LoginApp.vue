@@ -59,7 +59,7 @@ export default {
         firstName: true,
         lastName: true,
         address: true
-      }
+      },
     };
   },
   mounted() {
@@ -140,13 +140,14 @@ export default {
       this.validFields[field] = !!this[field];
     },
     async submitInfo() {
-      console.log("test");
-      alert('It works!');
-      try{
-      await axios.post('/adduser/',{
-            "fname": this.firstName, //asd
-            "lname": this.lastName, //asdasd
-            "address": this.address});//asd asd
+      try {
+        await axios.post('/adduser/',{
+              "first_name": this.firstName,
+              "password": "nah",
+              "username": "hellothisi",
+              "last_name": this.lastName,
+              "email": "dsajsd@example.com",
+              "address": this.address});
       }
       catch (error) {
         console.log(error.response.data);
