@@ -76,14 +76,11 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': str(os.environ.get('DATABASE_POSTGRES_USER')),
-        'USER': str(os.environ.get('DATABASE_POSTGRES_USER')),
-        'PASSWORD': str(os.environ.get('DATABASE_POSTGRES_PASSWORD')),
-        'HOST': str(os.environ.get('DATABASE_POSTGRES_URL_NON_POOLING')),
-        'PORT': '5432',
-    }
+    'default': dj_database_url.config(
+        # Replace this value with your local database's connection string.
+        default=str(os.environ.get('SUPABASE_URL')),
+        conn_max_age=600
+    )
 }
 
 # Password validation
