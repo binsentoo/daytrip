@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'passenger_cluster',
     'accounts',
     'rest_framework',
+    'trip_manager',
 ]
 
 MIDDLEWARE = [
