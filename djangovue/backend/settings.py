@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 import os
+import dj_database_url
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -20,12 +21,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-_&*r69#j-sc!q2)z8e25gb#&b($kl!j8t8b=4z%+0pd(l1tduy'
+SECRET_KEY = str(os.environ.get('DJANGO_KEY'))
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*.vercel.app', '127.0.0.1', 'daytrip-backend.onrender.com', 'localhost']
 
 
 # Application definition
@@ -58,9 +59,7 @@ ROOT_URLCONF = 'backend.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'frontend/build/templates'),
-                 os.path.join(BASE_DIR, 'frontend/build/static/vue'),
-                 os.path.join(BASE_DIR, 'frontend/build/static/subpages')],
+        'DIRS': [os.path.join(BASE_DIR, 'frontend/dist')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -79,13 +78,17 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
+print(str(os.environ.get('SUPABASE_PASSWORD')))
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': str(os.environ.get('SUPABASE_NAME')),
+        'USER': str(os.environ.get('SUPABASE_USER')),
+        'PASSWORD': str(os.environ.get('SUPABASE_PASSWORD')),
+        'HOST': str(os.environ.get('SUPABASE_HOST')),
+        'PORT': str(os.environ.get('SUPABASE_PORT')),
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -121,7 +124,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = 'dist/'
 
 AUTH_USER_MODEL = 'auth.User'
 
@@ -131,4 +134,14 @@ AUTH_USER_MODEL = 'auth.User'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 STATIC_ROOT = 'staticfiles/'
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'frontend/build/static')]
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'frontend/dist')]
+
+"""
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
+SECURE_SSL_REDIRECT = True
+SECURE_HSTS_SECONDS = 31536000 # One year in seconds
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+SECURE_HSTS_PRELOAD = True
+SECURE_CONTENT_TYPE_NOSNIFF = True
+"""

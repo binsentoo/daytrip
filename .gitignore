@@ -222,5 +222,5 @@ yarn-error.log
 # End of https://www.toptal.com/developers/gitignore/api/macos,django,vue,vuejs
 
 staticfiles/
-.vercel/project.json
-.vercel/README.txt
+.vercel
+output.css

@@ -43,7 +43,7 @@
 </template>
 
 <script>
-import HeaderComp from './HeaderComp.vue';
+import HeaderComp from '../components/HeaderComp.vue';
 import axios from 'axios';
 export default {
   components: {
@@ -82,7 +82,7 @@ export default {
     backgroundStyle() {
       const backgroundImage = this.getBackgroundImage();
       return {
-        backgroundImage: `url('/static/vue/assets/${backgroundImage}')`,
+        backgroundImage: `url('/assets/${backgroundImage}')`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',
