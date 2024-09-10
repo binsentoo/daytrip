@@ -35,17 +35,16 @@
       <a href="#" :class="linkClass">Currently at home? Click here.</a>
     </div>
 
-    <button 
-      class="rounded-md p-2.5 text-white bg-sky-500 hover:bg-sky-700 text-bold" 
-      @click="Submit"
-    >
+    <button class="rounded-md p-2.5 text-white bg-sky-500 hover:bg-sky-700 text-bold" 
+    @click="submitInfo">
       Start The Adventures
     </button>
   </div>
 </template>
 
 <script>
-import HeaderComp from './HeaderComp.vue';
+import HeaderComp from '../components/HeaderComp.vue';
+import axios from 'axios';
 export default {
   components: {
       HeaderComp
@@ -83,7 +82,7 @@ export default {
     backgroundStyle() {
       const backgroundImage = this.getBackgroundImage();
       return {
-        backgroundImage: `url('/static/vue/assets/${backgroundImage}')`,
+        backgroundImage: `url('/assets/${backgroundImage}')`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',
@@ -139,11 +138,25 @@ export default {
     },
     validateField(field) {
       this.validFields[field] = !!this[field];
+    },
+    async submitInfo() {
+      console.log("test");
+      alert('It works!');
+      try{
+      await axios.post('/adduser/',{
+            "fname": this.firstName, //asd
+            "lname": this.lastName, //asdasd
+            "address": this.address});//asd asd
+      }
+      catch (error) {
+        console.log(error.response.data);
+      }
+
     }
   },
   created() {
     this.updateTimeOfDay();
-  }
+  },
 };
 </script>
 

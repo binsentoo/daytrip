@@ -1,6 +1,5 @@
 import { createApp } from 'vue'
 import App from '../App.vue'
-import Header from '../components/HeaderComp.vue'
+import '../css/output.css'
 
 createApp(App).mount('#app')
-createApp(Header).mount('#header')
