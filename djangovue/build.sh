@@ -3,12 +3,12 @@
 set -o errexit
 
 # Modify this line as needed for your package manager (pip, poetry, etc.)
-python -m pip install -r requirements.txt
+python3.12 -m pip install -r requirements.txt
 
 # Convert static asset files
-python manage.py collectstatic --no-input
+python3.12 manage.py collectstatic --no-input
 
 # Apply any outstanding database migrations
-python manage.py migrate
+python3.12 manage.py migrate
 
-python -m gunicorn backend.asgi:application -k uvicorn.workers.UvicornWorker
+python3.12 -m gunicorn backend.asgi:application -k uvicorn.workers.UvicornWorker
