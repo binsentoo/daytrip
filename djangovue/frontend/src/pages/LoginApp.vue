@@ -141,13 +141,13 @@ export default {
     },
     async submitInfo() {
       try {
-        await axios.post(import.meta.env.BACKEND_URL,'/adduser/',{
+        await axios.post(import.meta.env.VITE_BACKEND_URL.concat('/adduser/'),{
               "fname": this.firstName,
               "lname": this.lastName,
               "address": this.address});
       }
       catch (error) {
-        console.log(error.response.data);
+        console.log(error);
       }
 
     }

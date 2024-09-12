@@ -224,3 +224,4 @@ yarn-error.log
 staticfiles/
 .vercel
 output.css
+djangovue/frontend/src/css/output.css
