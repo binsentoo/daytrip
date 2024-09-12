@@ -17,6 +17,8 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from backend import views
+from backend import settings
+from django.conf.urls.static import static
 
 # make sure the order is the same
 vue_urls = [
@@ -30,3 +32,6 @@ urlpatterns = [
   path('',include('accounts.urls')),
   path('',include('trip_manager.urls')),
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
