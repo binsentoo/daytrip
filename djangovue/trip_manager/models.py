@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils import timezone
 # Create your models here.
 
 
@@ -16,6 +17,7 @@ class Trip(models.Model):
     name = models.CharField(max_length=256)
     description = models.TextField(blank=True)
     events = models.ManyToManyField(Event)
+    UID = models.PositiveIntegerField(unique=True)
     @property 
     def final_min_cost(self):
         return sum(event.min_cost for event in self.events.all())
@@ -31,5 +33,8 @@ class Trip(models.Model):
     def end_time(self):
         last_event = self.events.order_by('-end_time').first()
         return last_event.end_time if last_event else None
-
+    def expire_trip(self):
+        if self.end_time < timezone.now():
+            self.active = False
+            self.save()
     #temperature conditons. Derived from the full event list by 

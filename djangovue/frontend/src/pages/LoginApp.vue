@@ -141,16 +141,13 @@ export default {
     },
     async submitInfo() {
       try {
-        await axios.post('/adduser/',{
-              "first_name": this.firstName,
-              "password": "nah",
-              "username": "hellothisi",
-              "last_name": this.lastName,
-              "email": "dsajsd@example.com",
+        await axios.post(import.meta.env.VITE_BACKEND_URL.concat('/adduser/'),{
+              "fname": this.firstName,
+              "lname": this.lastName,
               "address": this.address});
       }
       catch (error) {
-        console.log(error.response.data);
+        console.log(error);
       }
 
     }
