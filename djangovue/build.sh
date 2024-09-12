@@ -9,4 +9,5 @@ python3.12 -m pip install -r requirements.txt
 python3.12 manage.py collectstatic --no-input
 
 # Apply any outstanding database migrations
-python3.12 manage.py migrate
+python3.12 manage.py makemigrations --noinput
+python3.12 manage.py migrate --noinput
