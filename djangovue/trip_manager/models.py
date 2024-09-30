@@ -2,22 +2,11 @@ from django.db import models
 from django.utils import timezone
 # Create your models here.
 
-
-class Event(models.Model):
-    name = models.CharField(max_length=256)
-    description = models.TextField(blank=True)
-    start_time = models.DateTimeField(auto_now_add=False)
-    end_time = models.DateTimeField(auto_now_add=False)
-    location= models.CharField(max_length=256)
-    min_cost = models.DecimalField(max_digits=10, decimal_places=2)
-    max_cost = models.DecimalField(max_digits=10, decimal_places=2)
-    #temperature = models.FloatField(null=True, blank=True)
-
 class Trip(models.Model):
     name = models.CharField(max_length=256)
     description = models.TextField(blank=True)
-    events = models.ManyToManyField(Event)
-    UID = models.PositiveIntegerField(unique=True)
+    #events = models.ManyToManyField(Event)
+    UID = models.CharField(max_length=6, primary_key=True)
     @property 
     def final_min_cost(self):
         return sum(event.min_cost for event in self.events.all())
@@ -37,4 +26,14 @@ class Trip(models.Model):
         if self.end_time < timezone.now():
             self.active = False
             self.save()
-    #temperature conditons. Derived from the full event list by 
+
+class Event(models.Model):
+    name = models.CharField(max_length=256)
+    description = models.TextField(blank=True)
+    start_time = models.DateTimeField(auto_now_add=False)
+    end_time = models.DateTimeField(auto_now_add=False)
+    location= models.CharField(max_length=256)
+    min_cost = models.DecimalField(max_digits=10, decimal_places=2)
+    max_cost = models.DecimalField(max_digits=10, decimal_places=2)
+    #temperature = models.FloatField(null=True, blank=True) IGNORE
+    trip = models.ForeignKey(Trip, on_delete=models.CASCADE, related_name='events')

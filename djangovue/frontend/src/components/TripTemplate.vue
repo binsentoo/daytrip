@@ -43,7 +43,7 @@
   </template>
   
   <script>
-  import HeaderComp from '../components/HeaderComp.vue';
+  import HeaderComp from './HeaderComp.vue';
   import axios from 'axios';
   export default {
     components: {
@@ -82,7 +82,7 @@
       backgroundStyle() {
         const backgroundImage = this.getBackgroundImage();
         return {
-          backgroundImage: `url('/assets/${backgroundImage}')`,
+          backgroundImage: `url('/static/vue/assets/${backgroundImage}')`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           backgroundRepeat: 'no-repeat',
@@ -141,7 +141,7 @@
       },
       async submitInfo() {
         try {
-          await axios.post(import.meta.env.VITE_BACKEND_URL.concat('/adduser/'),{
+          await axios.post('/adduser/',{
                 "first_name": this.firstName,
                 "last_name": this.lastName,
                 "address": this.address});
@@ -149,6 +149,7 @@
         catch (error) {
           console.log(error.response.data);
         }
+  
       }
     },
     created() {
