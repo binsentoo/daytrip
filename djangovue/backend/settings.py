@@ -26,7 +26,7 @@ SECRET_KEY = str(os.environ.get('DJANGO_KEY'))
 DEBUG = False
 
 ALLOWED_HOSTS = ['.vercel.app', '127.0.0.1', 'localhost']
-
+CORS_ALLOW_ALL_ORIGINS = True
 
 # Application definition
 
@@ -41,9 +41,11 @@ INSTALLED_APPS = [
     'accounts',
     'rest_framework',
     'trip_manager',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
