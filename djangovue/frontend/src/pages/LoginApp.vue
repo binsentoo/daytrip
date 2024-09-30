@@ -141,7 +141,7 @@
       },
       async submitInfo() {
         try {
-          await axios.post('/adduser/',{
+          await axios.post(import.meta.env.VITE_BACKEND_URL.concat('/adduser/'),{
                 "first_name": this.firstName,
                 "last_name": this.lastName,
                 "address": this.address});
@@ -149,7 +149,6 @@
         catch (error) {
           console.log(error.response.data);
         }
-  
       }
     },
     created() {

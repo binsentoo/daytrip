@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     'accounts',
     'rest_framework',
     'trip_manager',
-    'corsheaders',
+    'corsheaders'
 ]
 
 MIDDLEWARE = [
@@ -53,6 +53,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
 ]
 
 ROOT_URLCONF = 'backend.urls'
@@ -141,6 +143,14 @@ AUTH_USER_MODEL = 'auth.User'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+CORS_ALLOWED_ORIGINS = [
+    "https://finddayway.vercel.app"
+]
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://finddayway.vercel.app",
+]
 
 """
 CSRF_COOKIE_SECURE = True

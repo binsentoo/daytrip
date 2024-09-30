@@ -26,7 +26,6 @@ class Trip(models.Model):
         if self.end_time < timezone.now():
             self.active = False
             self.save()
-    #temperature conditons. Derived from the full event list by 
 
 class Event(models.Model):
     name = models.CharField(max_length=256)
