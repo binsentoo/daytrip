@@ -28,6 +28,7 @@
           class="input-field" 
           style="width: 600px;" 
           placeholder="Address" 
+          id="address"
           v-model="address"
           @blur="validateField('address')"
           :class="{'border-red-500': !validFields.address}"
@@ -69,6 +70,9 @@
       if (localStorage.lastName) {
         this.lastName = localStorage.lastName;
       }
+      var autocomplete = new google.maps.places.Autocomplete(
+      document.getElementById("address"),
+ );
     },
     watch: {
       firstName(newName) {
