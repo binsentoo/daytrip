@@ -1,211 +1,115 @@
 <template>
-    <HeaderComp name="ok"></HeaderComp>
-    <div :style="backgroundStyle">
-      <h1 :class="h1Class">Good {{ timeOfDay }}!</h1>
-      
-      <div class="form-container">
-        <div class="form-row">
-          <input 
-            type="text" 
-            class="input-field" 
-            placeholder="First Name" 
-            v-model="firstName"
-            @blur="validateField('firstName')"
-            :class="{'border-red-500': !validFields.firstName}"
-          >
-          <input 
-            type="text" 
-            class="input-field" 
-            placeholder="Last Name" 
-            v-model="lastName"
-            @blur="validateField('lastName')"
-            :class="{'border-red-500': !validFields.lastName}"
-          >
-        </div>
-  
-        <input 
-          type="text" 
-          class="input-field" 
-          style="width: 600px;" 
-          placeholder="Address" 
-          v-model="address"
-          @blur="validateField('address')"
-          :class="{'border-red-500': !validFields.address}"
-        >
-        <a href="#" :class="linkClass">Currently at home? Click here.</a>
-      </div>
-  
-      <button class="rounded-md p-2.5 text-white bg-sky-500 hover:bg-sky-700 text-bold" 
-      @click="submitInfo">
-        Start The Adventures
-      </button>
+  <div class="max-w-4xl mx-auto p-6 bg-white shadow-md rounded-lg mt-8">
+    <!-- Loading State -->
+    <div v-if="loading" class="text-center text-gray-500 text-lg">
+      Loading trip details...
     </div>
-  </template>
-  
-  <script>
-  import HeaderComp from './HeaderComp.vue';
-  import axios from 'axios';
-  export default {
-    components: {
-        HeaderComp
-    },
-    data() {
-      return {
-        timeOfDay: '',
-        firstName: '',
-        lastName: '',
-        address: '',
-        validFields: {
-          firstName: true,
-          lastName: true,
-          address: true
-        },
+
+    <!-- Error State -->
+    <div v-else-if="error" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+      <strong class="font-bold">Error:</strong>
+      <span class="block sm:inline">{{ error }}</span>
+    </div>
+
+    <!-- Trip Details -->
+    <div v-else>
+      <!-- Trip Header -->
+      <div class="mb-6">
+        <h1 class="text-3xl font-bold text-gray-800">{{ trip.name }}</h1>
+        <p class="text-gray-600 mt-2">{{ trip.description }}</p>
+      </div>
+
+      <!-- Trip Metadata -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+        <div>
+          <span class="font-semibold">Trip UID:</span> {{ trip.UID }}
+        </div>
+        <div>
+          <span class="font-semibold">Duration:</span>
+          {{ formatDate(trip.start_time) }} to {{ formatDate(trip.end_time) }}
+        </div>
+        <div>
+          <span class="font-semibold">Total Cost:</span>
+          ${{ trip.final_min_cost.toFixed(2) }} - ${{ trip.final_max_cost.toFixed(2) }}
+        </div>
+      </div>
+
+      <!-- Events Section -->
+      <div>
+        <h2 class="text-2xl font-semibold text-gray-700 mb-4">Events</h2>
+        <div class="space-y-4">
+          <div v-for="event in trip.events" :key="event.id" class="border border-gray-200 rounded-lg p-4 hover:shadow-lg transition-shadow">
+            <h3 class="text-xl font-bold text-indigo-600">{{ event.name }}</h3>
+            <p class="text-gray-600 mt-2">{{ event.description }}</p>
+            <div class="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-2">
+              <div>
+                <span class="font-semibold">Time:</span>
+                {{ formatDate(event.start_time) }} - {{ formatDate(event.end_time) }}
+              </div>
+              <div>
+                <span class="font-semibold">Location:</span> {{ event.location }}
+              </div>
+              <div>
+                <span class="font-semibold">Cost:</span> ${{ event.min_cost }} - ${{ event.max_cost }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import axios from 'axios';
+
+export default {
+  name: 'TripDetails',
+  data() {
+    return {
+      trip: null,
+      loading: true,
+      error: null,
+    };
+  },
+  methods: {
+    async fetchTripDetails() {
+      try {
+        const response = await axios.get('http://127.0.0.1:8000/gettrip/000000/');
+        this.trip = response.data;
+      } catch (err) {
+        if (err.response) {
+          // Server responded with a status other than 2xx
+          this.error = `Error ${err.response.status}: ${err.response.data.detail || err.response.statusText}`;
+        } else if (err.request) {
+          // Request was made but no response received
+          this.error = 'No response from the server. Please check your network connection or the server status.';
+        } else {
+          // Something happened in setting up the request
+          this.error = `Request Error: ${err.message}`;
+        }
+      } finally {
+        this.loading = false;
+      }
+    },  
+    formatDate(dateString) {
+      const options = {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
       };
-    },
-    mounted() {
-      if (localStorage.firstName) {
-        this.firstName = localStorage.firstName;
-      }
-      if (localStorage.lastName) {
-        this.lastName = localStorage.lastName;
-      }
-    },
-    watch: {
-      firstName(newName) {
-        localStorage.firstName = newName;
-      },
-      lastName(newName) {
-        localStorage.lastName = newName;
-      },
-    },
-    computed: {
-      backgroundStyle() {
-        const backgroundImage = this.getBackgroundImage();
-        return {
-          backgroundImage: `url('/static/vue/assets/${backgroundImage}')`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat',
-          height: '100vh',
-          margin: '0',
-          padding: '0'
-        };
-      },
-      h1Class() {
-        return {
-          'text-white': this.timeOfDay === 'night',
-          'text-black': this.timeOfDay !== 'night',
-          '-translate-y-[120px]': true,
-          'font-poppins': true,
-          'text-9xl': true,
-          'opacity-0': true,
-          'fade-in-move': true
-        };
-      },
-      linkClass() {
-        return {
-          'font-medium': true,
-          'text-2xl': true,
-          'hover:underline': true,
-          'text-white': this.timeOfDay === 'morning' || this.timeOfDay === 'afternoon' || this.timeOfDay === 'night'
-        };
-      }
-    },
-    methods: {
-      updateTimeOfDay() {
-        const hour = new Date().getHours();
-        if (hour >= 0 && hour < 6 || hour >= 19) {
-          this.timeOfDay = 'night';
-        } else if (hour >= 6 && hour < 11) {
-          this.timeOfDay = 'morning';
-        } else if (hour >= 11 && hour < 15) {
-          this.timeOfDay = 'noon';
-        } else {
-          this.timeOfDay = 'afternoon';
-        }
-      },
-      getBackgroundImage() {
-        const hour = new Date().getHours();
-        if (hour >= 0 && hour < 6 || hour >= 19) {
-          return 'night.jpg';
-        } else if (hour >= 6 && hour < 11) {
-          return 'morning.jpg';
-        } else if (hour >= 11 && hour < 15) {
-          return 'noon.jpg';
-        } else {
-          return 'afternoon.jpg';
-        }
-      },
-      validateField(field) {
-        this.validFields[field] = !!this[field];
-      },
-      async submitInfo() {
-        try {
-          await axios.post('/adduser/',{
-                "first_name": this.firstName,
-                "last_name": this.lastName,
-                "address": this.address});
-        }
-        catch (error) {
-          console.log(error.response.data);
-        }
-  
-      }
-    },
-    created() {
-      this.updateTimeOfDay();
-    },
-  };
-  </script>
-  
-  <style scoped>
-  
-  div {
-    display: flex;
-    flex-direction: column; 
-    align-items: center; 
-    justify-content: center; 
-  }
-  
-  .form-container {
-    display: flex;
-    flex-direction: column;
-    gap: 10px; 
-    margin-bottom: 20px;
-  }
-  
-  .form-row {
-    display: flex;
-    flex-direction: row;
-    gap: 5px;
-    margin-bottom: 0%;
-  }
-  
-  .input-field {
-    width: 300px; 
-    padding: 20px; 
-    border: 2px solid #cccccc; 
-    border-radius: 135px; 
-  }
-  
-  .border-red-500 {
-    border-color: #f56565;
-  }
-  
-  @keyframes fadeInMove {
-    from {
-      opacity: 0;
-      transform: translateY(-40px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(-120px);
-    }
-  }
-  
-  .fade-in-move {
-    animation: fadeInMove 2s ease-in-out forwards;
-  }
-  
-  </style>
-  
+      return new Date(dateString).toLocaleDateString(undefined, options);
+    },  
+  },
+  mounted() {
+    this.fetchTripDetails();
+  },  
+};
+</script>
+
+
+<style scoped>
+
+</style>
