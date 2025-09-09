@@ -7,7 +7,7 @@
     <div>
       <ul>
         <li v-for="location in locations"> 
-          <p class="hover:text-red-400 hover:line-through inline-block" @click="deletePerson(name)"> {{ location.name }} {{ location.time }} {{ location.address }} {{ location.description }}</p>
+          <p class="hover:text-red-400 hover:line-through inline-block" @click="deleteActivity(location.id)"> {{ location.name }} {{ location.start_time }} {{ location.location }} {{ location.note }}</p>
         </li>
       </ul>
       <div v-if="!addingLocation">
@@ -36,35 +36,65 @@
   </div>
 </template>
   
-<script>
-  export default {
-    data() {
-      return {
-        locations: [],
-        addingLocation: false
-      }
-    },
-    methods: {
-      addPlace() {
-        this.addingLocation = true
-      },
-      createLocation() {
-          let location = {
-            "name": this.placeName,
-            "time": this.placeTime,
-            "address": this.placeAddr,
-            "description": this.description
-          }
-          this.locations.push(location)
-          this.cancel()
-      },
-      cancel() {
-        this.placeName = ""
-        this.placeTime = ""
-        this.placeAddr = ""
-        this.description = ""
-        this.addingLocation = false
-      }
+<script setup>
+import {ref, onMounted} from 'vue';
+import axios from 'axios';
+
+const locations = ref([])
+const addingLocation = ref(false)
+
+const placeName = ref('')
+const placeTime = ref('')
+const placeAddr = ref('')
+const description = ref('')
+
+function addPlace() {
+  addingLocation.value = true
+}
+
+async function fetchActivities() {
+  try {
+    const response = await axios.get('http://127.0.0.1:8000/api/daytrips/8BZY9H/');
+    locations.value = response.data.activities;
+  } catch (error) {
+    console.error('Error fetching activities:', error);
+  }
+}
+
+onMounted(() => {
+  fetchActivities();
+});
+ 
+
+async function createLocation() {
+    try {
+        const response = await axios.post('http://127.0.0.1:8000/api/activity/', {
+            name: placeName.value,
+            location: placeAddr.value,
+            start_time: null,
+            note: description.value,
+            daytrip: "8BZY9H"
+        })
+        cancel()
+        fetchActivities()
+    } catch(error) {
+    }
+}
+
+function cancel() {
+  placeName.value = ''
+  placeTime.value = ''
+  placeAddr.value = ''
+  description.value = ''
+  addingLocation.value = false
+}
+
+async function deleteActivity(id) {
+  try {
+    const response = await axios.delete(`http://127.0.0.1:8000/api/activity/${id}/`);
+    fetchActivities();
+  } catch(error) {
+
   }
 }
 </script>
