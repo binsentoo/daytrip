@@ -52,9 +52,13 @@ function addPlace() {
   addingLocation.value = true
 }
 
+const props = defineProps({
+  code: String
+})
+
 async function fetchActivities() {
   try {
-    const response = await axios.get('http://127.0.0.1:8000/api/daytrips/8BZY9H/');
+    const response = await axios.get(`http://127.0.0.1:8000/api/daytrips/${props.code}/`);
     locations.value = response.data.activities;
   } catch (error) {
     console.error('Error fetching activities:', error);
@@ -73,7 +77,7 @@ async function createLocation() {
             location: placeAddr.value,
             start_time: null,
             note: description.value,
-            daytrip: "8BZY9H"
+            daytrip: props.code,
         })
         cancel()
         fetchActivities()

@@ -71,8 +71,8 @@ function saveTitle() {
             <p class="text-left font-semibold">Invite Code: </p>
         </div>
       </div>
-      <AddPeople/>
-      <LocationLister/>
-      <TripTemplate/>
+      <AddPeople :code="code"/>
+      <LocationLister :code="code"/>
+      <TripTemplate :code="code"/>
     </div>
 </template>
