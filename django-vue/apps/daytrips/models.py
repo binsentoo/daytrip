@@ -32,3 +32,13 @@ class Activity(models.Model):
     #end_time = models.TimeField(null=True, blank=True)
     #duration = models.DurationField(null=True, blank=True)
     note = models.TextField(blank = True)
+
+class Attendee(models.Model):
+    daytrip = models.ForeignKey(
+        Daytrip,
+        on_delete=models.CASCADE,
+        related_name="attendee",
+    )
+    name = models.CharField(max_length=32)
+    is_going = models.BooleanField(default=False)
+    is_driver = models.BooleanField(default=False)
