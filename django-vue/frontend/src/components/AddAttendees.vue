@@ -30,31 +30,32 @@
     </div>
   </template>
     
-  <script>
-  export default {
-    data() {
-      return {
-        invitePerson: false,
-        names: []
-      }
-    },
-    methods: {
-      addPerson() {
-        this.invitePerson = true
-      },
-      createPerson() {
-        this.names.push(this.personName)
-        this.personName = ""
-        this.invitePerson = false
-      },
-      cancelPerson() {
-        this.personName = ""
-        this.invitePerson = false
-      },
-      deletePerson(name) {
-        const index = this.names.indexOf(name)
-        this.names.splice(index, 1)
-      }
-    }
+<script setup>
+import {ref} from 'vue';
+
+const invitePerson = ref(false)
+const names = ref([])
+const personName = ref('')
+
+function addPerson() {
+  invitePerson.value = true
+}
+
+function createPerson() {
+  if (personName.value.trim() !== '') {
+    names.value.push(personName.value.trim())
+    personName.value = ''
+    invitePerson.value = false
   }
-  </script>
+}
+
+function cancelPerson() {
+  personName.value = ""
+  invitePerson.value = false
+}
+
+function deletePerson(name) {
+  const index = names.value.indexOf(name)
+  names.value.splice(index, 1)
+}
+</script>
