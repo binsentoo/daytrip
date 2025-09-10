@@ -1,17 +1,24 @@
 <template>
-  <div class="relative bg-white px-10 pt-10 pb-8 shadow-xl ring-1 ring-gray-900/5 mx-auto max-w-3xl rounded-lg">
+  <div class="relative bg-white px-10 pt-10 pb-8 shadow-xl ring-1 ring-gray-900/5 mx-auto min-w-xl max-w-3xl rounded-lg">
     <div>
-      <p class="font-serif font-bold text-2xl">Locations</p>
-      <p class="font-serif text-xl">Where ya headed?</p>
+      <p class="font-serif font-bold text-2xl">Activities</p>
+      <p class="font-serif text-xl">What are we doing?</p>
     </div>
     <div>
       <ul>
-        <li v-for="location in locations"> 
-          <p class="hover:text-red-400 hover:line-through inline-block" @click="deleteActivity(location.id)"> {{ location.name }} {{ location.start_time }} {{ location.location }} {{ location.note }}</p>
+        <li v-for="activity in activities"> 
+          <!--<p class="hover:text-red-400 hover:line-through inline-block" @click="deleteActivity(location.id)"> {{ location.name }} {{ location.start_time }} {{ location.location }} {{ location.note }}</p>-->
+          <div class="flex flex-row justify-between">
+            <p class="hover:text-red-400 hover:line-through inline-block font-serif text-2xl" @click="deleteActivity(activity.id)"> {{ activity.name }} </p>
+            <p class="font-serif text-xl"> {{ activity.start_time }}</p>
+          </div>
+          <p class="font-serif text-lg"> {{ activity.location }}</p>
+          <p class="font-sans"> {{ activity.note }}</p>
+          <hr class="border-t border-gray-300 my-4">
         </li>
       </ul>
       <div v-if="!addingLocation">
-        <button class="rounded-md p-2.5 text-white bg-orange-500 hover:bg-orange-700" @click="addPlace">Add Location</button>
+        <button class="rounded-md p-2.5 text-white bg-orange-500 hover:bg-orange-700" @click="addPlace">Add Activity</button>
       </div>
     </div>
     <div v-if="addingLocation">
@@ -30,7 +37,7 @@
         />
         <p class="font-semibold">Description:</p>
         <textarea class="block w-full px-3 py-2 text-black placeholder-gray-400 transition duration-100 ease-in-out bg-white border border-gray-300 rounded shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-opacity-50" placeholder="A great fusion restaurant. $20-30 per!" v-model="description"></textarea>
-        <button class="rounded-md p-2.5 text-white bg-orange-500 hover:bg-orange-700" @click="createLocation">Create Location</button>
+        <button class="rounded-md p-2.5 text-white bg-orange-500 hover:bg-orange-700" @click="createLocation">Create Activity</button>
         <button class="rounded-md p-1.5 text-black border-4 border-red-500 hover:border-red-700" @click="cancel">Cancel</button>
     </div>
   </div>
@@ -40,7 +47,15 @@
 import {ref, onMounted} from 'vue';
 import axios from 'axios';
 
-const locations = ref([])
+const props = defineProps({
+  code: String,
+})
+
+onMounted(() => {
+  fetchActivities()
+})
+
+const activities = ref([])
 const addingLocation = ref(false)
 
 const placeName = ref('')
@@ -52,36 +67,29 @@ function addPlace() {
   addingLocation.value = true
 }
 
-const props = defineProps({
-  code: String
-})
-
 async function fetchActivities() {
   try {
     const response = await axios.get(`http://127.0.0.1:8000/api/daytrips/${props.code}/`);
-    locations.value = response.data.activities;
+    activities.value = response.data.activities;
   } catch (error) {
     console.error('Error fetching activities:', error);
   }
 }
-
-onMounted(() => {
-  fetchActivities();
-});
- 
 
 async function createLocation() {
     try {
         const response = await axios.post('http://127.0.0.1:8000/api/activity/', {
             name: placeName.value,
             location: placeAddr.value,
-            start_time: null,
+            start_time: "12:30",
             note: description.value,
             daytrip: props.code,
         })
+        console.log(response);
         cancel()
         fetchActivities()
     } catch(error) {
+      console.error('Create location error:', error.response?.data || error.message)
     }
 }
 

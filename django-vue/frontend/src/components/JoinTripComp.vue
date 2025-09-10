@@ -1,15 +1,17 @@
 <script setup>
-import axios from 'axios'
-import {ref} from 'vue'
+import axios from 'axios';
+import {ref} from 'vue';
+import router from '@/router';
 
 const code = ref('')
 
 async function getDaytrip() {
     try {
         const response = await axios.get(`http://127.0.0.1:8000/api/daytrips/${code.value}/`)
-        alert(response.data.title)
+        router.push(`/daytrip/${code.value}`)
         return response.data
     } catch(error) {
+        // TODO: display error
         console.error('Error fetching daytrip: ', error)
     }
 }

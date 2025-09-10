@@ -41,7 +41,6 @@ function saveTitle() {
 
 <template>
     <div class="bg-gray-800 flex flex-col h-screen">
-      {{  code  }}
       <HeaderComp/>
       <div class="m-5 flex justify-start">
         <!-- Overview -->
@@ -68,7 +67,7 @@ function saveTitle() {
               <textarea required class="block w-full px-3 py-2 text-black placeholder-gray-400 transition duration-100 ease-in-out bg-white border border-gray-300 rounded shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-opacity-50" placeholder="Describe your event!" v-model="form.description"></textarea>
             </div>
           </div>
-            <p class="text-left font-semibold">Invite Code: </p>
+            <p class="text-left font-semibold">Invite Code: {{ code }}</p>
         </div>
       </div>
       <AddPeople :code="code"/>
