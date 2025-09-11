@@ -1,16 +1,15 @@
 <script setup>
-import AddPeople from '../components/AddPeople.vue';
+import AddAttendees from '../components/AddAttendees.vue';
 import HeaderComp from '../components/HeaderComp.vue';
 import LocationLister from '../components/LocationLister.vue';
 import TripTemplate from '../components/TripTemplate.vue';
 
 import { useRoute } from 'vue-router'
 
+import { ref } from 'vue'
+
 const route = useRoute()
 const code = route.params.code
-
-import { ref } from 'vue'
-import axios from 'axios'
 
 const title = ref('Event Name')
 const tempValue = ref(null)
@@ -42,7 +41,8 @@ function saveTitle() {
 <template>
     <div class="bg-gray-800 flex flex-col h-screen">
       <HeaderComp/>
-      <div class="m-5 flex justify-start">
+      <div class="grid grid-cols-2 gap-4">
+        <div class="m-5 flex justify-start">
         <!-- Overview -->
         <div class="relative bg-white px-10 pt-10 pb-8 shadow-xl ring-1 ring-gray-900/5 min-w-2xl rounded-lg">
             <div v-if="!editMode" class="flex pb-1">
@@ -70,8 +70,9 @@ function saveTitle() {
             <p class="text-left font-semibold">Invite Code: {{ code }}</p>
         </div>
       </div>
-      <AddPeople :code="code"/>
-      <LocationLister :code="code"/>
-      <TripTemplate :code="code"/>
+        <LocationLister class="mt-5" :code="code"/>
+        <AddAttendees class="mt-5" :code="code"/>
+        <TripTemplate :code="code"/>
+      </div>
     </div>
 </template>

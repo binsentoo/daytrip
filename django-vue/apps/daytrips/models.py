@@ -37,7 +37,7 @@ class Attendee(models.Model):
     daytrip = models.ForeignKey(
         Daytrip,
         on_delete=models.CASCADE,
-        related_name="attendee",
+        related_name="attendees",
     )
     name = models.CharField(max_length=32)
     is_going = models.BooleanField(default=False)
