@@ -1,5 +1,5 @@
 <template>
-  <div class="relative bg-white px-10 pt-10 pb-8 shadow-xl ring-1 ring-gray-900/5 mx-auto min-w-xl max-w-3xl rounded-lg">
+  <div class="relative bg-white px-10 pt-10 pb-8 shadow-xl ring-1 ring-gray-900/5 rounded-lg">
     <div>
       <p class="font-serif font-bold text-2xl">Activities</p>
       <p class="font-serif text-xl">What are we doing?</p>

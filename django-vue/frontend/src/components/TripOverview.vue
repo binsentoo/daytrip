@@ -1,0 +1,48 @@
+<template>
+  <div class="relative bg-white p-4 shadow-xl ring-1 ring-gray-900/5 rounded-lg">
+    <!--Filler "image"-->
+    <div class="bg-blue-900 h-1/3 w-full rounded-2xl">
+      
+    </div>
+    <p class="font-serif font-extrabold text-2xl mt-0.5"> {{ title }}</p>
+    <div>
+      <div class="flex-column pb-0.5">
+        <p class="font-serif font-semibold">Sat, May 25 • 8:00 AM - 6:00 PM</p>
+      </div>
+      <div class="bg-gray-50 border border-gray-200 rounded-xl p-4 text-gray-700 leading-relaxed shadow-sm"> {{ description }}</div>
+    </div>
+    <p class="text-left font-semibold">Invite Code: {{ code }}</p>
+  </div>
+</template>
+
+<script setup>
+import { ref, onMounted } from 'vue'
+import axios from 'axios'
+
+const title = ref('')
+const dateTime = ref('')
+const description = ref('')
+
+const props = defineProps({
+  code: String,
+})
+
+async function fetchDaytrip() {
+  try {
+    const response = await axios.get(`http://127.0.0.1:8000/api/daytrips/${props.code}/`);
+    console.log(response.data)
+    title.value = response.data.title
+    dateTime.value = response.data.date
+    description.value = response.data.desc
+  } catch (error) {
+    console.error('Error fetching daytrip:', error);
+  }
+}
+
+onMounted(() => {
+  fetchDaytrip()
+})
+
+
+
+</script>

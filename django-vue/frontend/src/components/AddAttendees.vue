@@ -1,5 +1,5 @@
 <template>
-  <div class="relative bg-white px-10 pt-10 pb-8 shadow-xl ring-1 ring-gray-900/5 mx-auto max-w-xs rounded-lg">
+  <div class="bg-white shadow-xl ring-1 ring-gray-900/5 rounded-lg p-4">
     <div class="flex justify-between">
       <p class="font-serif text-2xl mr-20 font-extrabold">Invite List</p>
       <button @click="addPerson">
@@ -16,8 +16,6 @@
       <li v-for="attendee in attendees">
         <p class="hover:text-red-400 hover:line-through inline-block font-serif font-bold text-xl"
           @click="deletePerson(attendee.id)"> {{ attendee.name }} </p>
-        <button class="rounded-md p-.5 text-white bg-orange-500 hover:bg-orange-700">Going</button>
-        <button class="rounded-md p-.5 text-white bg-orange-500 hover:bg-orange-700">Not Going</button>
         <div class="flex space-x-1">
         <div v-if="attendee.is_going">
           Going
@@ -60,9 +58,6 @@
         <label for="driving">Driving</label>
         </input>
       </div>
-    </div>
-    <div>
-      <p>invite link here?</p>
     </div>
   </div>
 </template>
