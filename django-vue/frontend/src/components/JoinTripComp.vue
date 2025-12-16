@@ -19,7 +19,6 @@ async function getDaytrip() {
 </script>
 
 <template>
-    <div class="relative bg-white px-10 pt-10 pb-8 shadow-xl ring-1 ring-gray-900/5 mx-auto max-w-lg rounded-lg mt-16">
     <p class="font-serif text-2xl">View Daytrip</p>
     <p class="text-left font-semibold">Invite Code:</p>
     <form @submit.prevent="getDaytrip">
@@ -28,5 +27,4 @@ async function getDaytrip() {
         Submit
     </button>
     </form>
-    </div>
 </template>

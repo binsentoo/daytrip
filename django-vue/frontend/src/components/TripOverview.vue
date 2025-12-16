@@ -1,13 +1,9 @@
 <template>
   <div class="relative bg-white p-4 shadow-xl ring-1 ring-gray-900/5 rounded-lg">
-    <!--Filler "image"-->
-    <div class="bg-blue-900 h-1/3 w-full rounded-2xl">
-      
-    </div>
     <p class="font-serif font-extrabold text-2xl mt-0.5"> {{ title }}</p>
     <div>
       <div class="flex-column pb-0.5">
-        <p class="font-serif font-semibold">Sat, May 25 • 8:00 AM - 6:00 PM</p>
+        <p class="font-serif font-semibold"> {{ dateTime }}</p>
       </div>
       <div class="bg-gray-50 border border-gray-200 rounded-xl p-4 text-gray-700 leading-relaxed shadow-sm"> {{ description }}</div>
     </div>
