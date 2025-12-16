@@ -79,7 +79,7 @@ const props = defineProps({
 async function fetchAttendees() {
   try {
     const API_BASE = import.meta.env.VITE_API_BASE || 'http://127.0.0.1:8000'
-    const response = await axios.get(`${API_BASE}/api/daytrips/${props.code}/`)
+    const response = await axios.get(`${API_BASE}/api/daytrips/${props.code}/`);
     attendees.value = response.data.attendees;
   } catch (error) {
     console.error('Error fetching attendees:', error);
@@ -97,7 +97,8 @@ function addPerson() {
 async function createPerson() {
   if (personName.value.trim() !== '') {
     try {
-      const response = await axios.post('http://127.0.0.1:8000/api/attendees/', {
+      const API_BASE = import.meta.env.VITE_API_BASE || 'http://127.0.0.1:8000'
+      const response = await axios.post(`${API_BASE}/api/attendees/`, {
         name: personName.value.trim(),
         is_going: going.value,
         is_driver: driving.value,
@@ -106,7 +107,7 @@ async function createPerson() {
       cancelPerson()
       fetchAttendees()
     } catch (error) {
-      console.error('Create attendee error:', error.response?.data || error.message)
+      console.error('Create attendee error:', error.response.data || error.message)
     }
   }
 }
