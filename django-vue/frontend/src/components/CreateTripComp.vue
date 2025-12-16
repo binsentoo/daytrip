@@ -61,7 +61,8 @@ const message = ref('')
 
 async function submitDaytrip() {
   try {
-    const response = await axios.post('http://127.0.0.1:8000/api/daytrips/', {
+    const API_BASE = import.meta.env.VITE_API_BASE || 'http://127.0.0.1:8000'
+    const response = await axios.post(`${API_BASE}/api/daytrips/`, {
       title: title.value,
       date: form.value.date,
       desc: form.value.description,
