@@ -35,7 +35,7 @@
           placeholder="Describe your event!" v-model="form.description"></textarea>
       </div>
     </div>
-    <div class="mt-3 flex justify-center gap-6"">
+    <div class="mt-3 flex justify-center gap-6">
       <button class="mx-10 mt-5 rounded-md p-2.5 text-white bg-blue-500 hover:bg-blue-700">Return</button>
       <button class="mx-10 mt-5 rounded-md p-2.5 text-white bg-orange-500 hover:bg-orange-700">Create DayTrip</button>
     </div>

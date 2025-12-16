@@ -3,7 +3,7 @@ import HeaderComp from '../components/HeaderComp.vue';
 import InitComp from '../components/InitComp.vue';
 import CreateTrip from '../components/CreateTripComp.vue';
 import JoinTrip from '../components/JoinTripComp.vue';
-import vacation from '@/assets/vacation.jpeg'
+import vacation from '../assets/vacation.jpeg'
 
 export default {
   components: {
@@ -55,7 +55,7 @@ export default {
         <!-- right side -->
         <div>
           <div class="bg-white rounded-2xl shadow-lg p-6 h-72 flex-col flex overflow-hidden">
-            <img class="mx-auto p-7 pb-2" :src="vacation" alt="DayTrip 'Icon'" width="250" height="250" v-if="current != 'create' && current !='join'">
+            <img class="mx-auto p-7 pb-2" :src="vacation" alt="DayTrip Icon" width="250" height="250" v-if="current != 'create' && current !='join'">
             <CreateTrip v-if="current === 'create'" />
             <JoinTrip v-if="current === 'join'" />
           </div>
