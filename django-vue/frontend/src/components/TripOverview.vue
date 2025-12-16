@@ -19,8 +19,8 @@ const title = ref('')
 const dateTime = ref('')
 const description = ref('')
 
-const props = defineProps({
-  code: String,
+const { code } = defineProps({
+  code: String
 })
 
 async function fetchDaytrip() {
