@@ -70,7 +70,7 @@ function addPlace() {
 async function fetchActivities() {
   try {
     const API_BASE = import.meta.env.VITE_API_BASE || 'http://127.0.0.1:8000'
-    const response = await axios.get(`${API_BASE}/api/daytrips/${code}/`)
+    const response = await axios.get(`${API_BASE}/api/daytrips/${props.code}/`)
     activities.value = response.data.activities;
   } catch (error) {
     console.error('Error fetching activities:', error);
@@ -105,7 +105,8 @@ function cancel() {
 
 async function deleteActivity(id) {
   try {
-    const response = await axios.delete(`http://127.0.0.1:8000/api/activity/${id}/`);
+    const API_BASE = import.meta.env.VITE_API_BASE || 'http://127.0.0.1:8000'
+    const response = await axios.delete(`${API_BASE}/api/daytrips/${id}/`);
     fetchActivities();
   } catch(error) {
 

@@ -121,7 +121,8 @@ function cancelPerson() {
 
 async function deletePerson(id) {
   try {
-    const response = await axios.delete(`http://127.0.0.1:8000/api/attendees/${id}/`);
+    const API_BASE = import.meta.env.VITE_API_BASE || 'http://127.0.0.1:8000'
+    const response = await axios.delete(`${API_BASE}/api/attendees/${id}/`);
     fetchAttendees();
   } catch (error) {
 
