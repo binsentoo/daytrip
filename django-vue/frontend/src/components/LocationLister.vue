@@ -106,7 +106,7 @@ function cancel() {
 async function deleteActivity(id) {
   try {
     const API_BASE = import.meta.env.VITE_API_BASE || 'http://127.0.0.1:8000'
-    const response = await axios.delete(`${API_BASE}/api/daytrips/${id}/`);
+    const response = await axios.delete(`${API_BASE}/api/activity/${id}/`);
     fetchActivities();
   } catch(error) {
 
