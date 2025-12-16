@@ -78,7 +78,8 @@ const props = defineProps({
 
 async function fetchAttendees() {
   try {
-    const response = await axios.get(`http://127.0.0.1:8000/api/daytrips/${props.code}/`);
+    const API_BASE = import.meta.env.VITE_API_BASE || 'http://127.0.0.1:8000'
+    const response = await axios.get(`${API_BASE}/api/daytrips/${props.code}/`)
     attendees.value = response.data.attendees;
   } catch (error) {
     console.error('Error fetching attendees:', error);

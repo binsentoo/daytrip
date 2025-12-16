@@ -79,7 +79,8 @@ async function fetchActivities() {
 
 async function createLocation() {
     try {
-        const response = await axios.post('http://127.0.0.1:8000/api/activity/', {
+        const API_BASE = import.meta.env.VITE_API_BASE || 'http://127.0.0.1:8000'
+        const response = await axios.post(`${API_BASE}/api/activity/`, {
             name: placeName.value,
             location: placeAddr.value,
             start_time: "12:30",
