@@ -62,7 +62,7 @@ MIDDLEWARE = [
 ]
 
 CORS_ALLOWED_ORIGINS = [
-    "https://daytrip-kappa.vercel.app/"
+    "https://daytrip-kappa.vercel.app"
 ]
 
 ROOT_URLCONF = 'backend.urls'
