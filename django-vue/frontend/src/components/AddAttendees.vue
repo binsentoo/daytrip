@@ -1,63 +1,64 @@
 <template>
   <div class="bg-white shadow-xl ring-1 ring-gray-900/5 rounded-lg p-4">
-    <div class="flex justify-between">
-      <p class="font-serif text-2xl mr-20 font-extrabold">Invite List</p>
-      <button @click="addPerson">
-        <svg class="h-8 w-8 text-slate-900 flex" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-          stroke-linecap="round" stroke-linejoin="round">
-          <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
-          <circle cx="8.5" cy="7" r="4" />
-          <line x1="20" y1="8" x2="20" y2="14" />
-          <line x1="23" y1="11" x2="17" y2="11" />
-        </svg>
+    <div class="flex items-center justify-between">
+      <p class="font-serif text-xl mr-20 font-extrabold">Invite List</p>
+      <button @click="addPerson" class="text-gray-400 hover:text-navy transition">
+        <i class="ti ti-user-plus text-lg"></i>
       </button>
     </div>
+    <p class="text-xs mb-2">Hover over to delete.</p>
     <ul>
-      <li v-for="attendee in attendees">
-        <p class="hover:text-red-400 hover:line-through inline-block font-serif font-bold text-xl"
-          @click="deletePerson(attendee.id)"> {{ attendee.name }} </p>
-        <div class="flex space-x-1">
-        <div v-if="attendee.is_going">
-          Going
+      <li v-for="(attendee, index) in attendees" class="group my-2">
+        <!-- name and badges-->
+        <div class="flex items-center gap-2">
+          <p class="inline-block text-l"> {{ attendee.name }} </p>
+          <!-- toggle groups (RSVP and Driving)-->
+          <Select :model-value="attendee.is_going ? 'going' : 'notgoing'"
+              @update:model-value="(val) => updateAttendee(attendee, 'is_going', val === 'going')">
+              <SelectTrigger class="px-2 text-xs gap-0"
+                :class="attendee.is_going ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="going">Going</SelectItem>
+                <SelectItem value="notgoing">Not Going</SelectItem>
+              </SelectContent>
+          </Select>
+          <Select :model-value="attendee.is_driver ? 'driving' : 'notdriving'"
+              @update:model-value="(val) => updateAttendee(attendee, 'is_driver', val === 'driving')">
+              <SelectTrigger class="px-2 text-xs gap-0"
+                :class="attendee.is_driver ? 'bg-blue-100 text-blue-700' : 'bg-gray-100 text-gray-700'">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="driving">Driving</SelectItem>
+                <SelectItem value="notdriving">Not Driving</SelectItem>
+              </SelectContent>
+          </Select>
+          <button @click="deletePerson(attendee.id)"
+            class="text-red-300 hover:text-red-500 transition opacity-0 group-hover:opacity-100">
+            <i class="ti ti-trash text-sm"></i>
+          </button>
         </div>
-        <div v-else>
-          Not Going
-        </div>
-        <div v-if="attendee.is_driver">
-          Driving
-        </div>
-        </div>
-        <hr class="border-t border-gray-300 my-4">
       </li>
     </ul>
+    <!-- add person form -->
     <div v-if="invitePerson" class="flex flex-col">
-      <div class="flex align-middle">
-        <input class="font-sans focus:text-gray-500 text-gray-400 border-2 border-gray-700" maxlength="16" size="16"
-          placeholder="Name" v-model="personName" />
-        <button @click="createPerson">
-          <svg class="h-6 w-6 text-slate-900" width="24" height="24" viewBox="0 0 24 24" stroke-width="2"
-            stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-            <path stroke="none" d="M0 0h24v24H0z" />
-            <path d="M5 12l5 5l10 -10" />
-          </svg>
-        </button>
-        <button @click="cancelPerson">
-          <svg class="h-6 w-6 text-slate-900" width="24" height="24" viewBox="0 0 24 24" stroke-width="2"
-            stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-            <path stroke="none" d="M0 0h24v24H0z" />
-            <line x1="18" y1="6" x2="6" y2="18" />
-            <line x1="6" y1="6" x2="18" y2="18" />
-          </svg>
-        </button>
-      </div>
-      <div class="flex space-x-4 items-center">
-        <input type="checkbox" id="going" v-model="going">
-        <label for="going">Going</label>
-        </input>
-        <input type="checkbox" v-model="driving">
-        <label for="driving">Driving</label>
-        </input>
-      </div>
+      <Field>
+        <Input maxlength="16" size="16" v-model="personName" placeholder="Name"/>
+        <div class="flex ml-1 space-x-4 items-center">
+          <input class="accent-brand-orange" type="checkbox" id="going" v-model="going">
+            <label for="going">Going</label>
+          </input>
+          <input class="accent-blue-500" type="checkbox" v-model="driving">
+            <label for="driving">Driving</label>
+          </input>
+        </div>
+        <div class="flex align-middle gap-2"> 
+          <Button @click="createPerson">Submit</Button>
+          <Button @click="cancelPerson" variant="secondary">Cancel</Button>
+        </div>
+      </Field>
     </div>
   </div>
 </template>
@@ -65,6 +66,11 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
+import { Separator } from "@/components/ui/separator"
+import { Select, SelectContent, SelectTrigger, SelectItem, SelectValue } from "@/components/ui/select"
+import { Field } from "@/components/ui/field"
+import { Input } from "@/components/ui/input"
+import { Button } from '@/components/ui/button';
 
 const invitePerson = ref(false)
 const attendees = ref([])
@@ -98,7 +104,7 @@ async function createPerson() {
   if (personName.value.trim() !== '') {
     try {
       const API_BASE = import.meta.env.VITE_API_BASE || 'http://127.0.0.1:8000'
-      const response = await axios.post(`${API_BASE}/api/attendees/`, {
+      await axios.post(`${API_BASE}/api/attendees/`, {
         name: personName.value.trim(),
         is_going: going.value,
         is_driver: driving.value,
@@ -125,7 +131,17 @@ async function deletePerson(id) {
     const response = await axios.delete(`${API_BASE}/api/attendees/${id}/`);
     fetchAttendees();
   } catch (error) {
+    console.error('Delete attendee error: ', error)
+  }
+}
 
+async function updateAttendee(attendee, field, value) {
+  try {
+    const API_BASE = import.meta.env.VITE_API_BASE || 'http://127.0.0.1:8000'
+    await axios.patch(`${API_BASE}/api/attendees/${attendee.id}/`, {[field]: value});
+    attendee[field] = value
+  } catch (error) {
+    console.error('Update attendee error: ', error)
   }
 }
 </script>

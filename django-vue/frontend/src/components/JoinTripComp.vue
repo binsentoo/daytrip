@@ -2,6 +2,7 @@
 import axios from 'axios';
 import {ref} from 'vue';
 import router from '@/router';
+import { Input } from '@/components/ui/input'
 
 const code = ref('')
 
@@ -12,7 +13,6 @@ async function getDaytrip() {
         router.push(`/daytrip/${code.value}`)
         return response.data
     } catch(error) {
-        // TODO: display error
         console.error('Error fetching daytrip: ', error)
     }
 }
@@ -20,12 +20,14 @@ async function getDaytrip() {
 </script>
 
 <template>
-    <p class="font-serif text-2xl">View Daytrip</p>
-    <p class="text-left font-semibold">Invite Code:</p>
-    <form @submit.prevent="getDaytrip">
-        <input required class="font-sans pl-2 border-amber-300" type="text" v-model="code">
-    <button class="rounded-md p-2.5 text-white bg-orange-500 hover:bg-orange-700">
-        Submit
-    </button>
-    </form>
+    <div>
+        <p class="font-serif text-2xl">View Daytrip</p>
+        <p class="text-left font-semibold">Invite Code:</p>
+        <form @submit.prevent="getDaytrip">
+            <Input required type="text" v-model="code" />
+            <div class="mt-3 flex justify-center">
+                <button class="mt-3 mb-4 rounded-md p-2.5 px-20 font-semibold text-white bg-orange-500 hover:bg-orange-700">Submit</button>
+            </div>
+        </form>
+    </div>
 </template>
