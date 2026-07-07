@@ -28,6 +28,8 @@ class Activity(models.Model):
     )
     name = models.CharField(max_length=128)
     location = models.TextField(blank=True)
+    lat = models.FloatField(null=True, blank=True)
+    lng = models.FloatField(null=True, blank=True)
     start_time = models.TimeField(null=True, blank=True)
     #end_time = models.TimeField(null=True, blank=True)
     #duration = models.DurationField(null=True, blank=True)
