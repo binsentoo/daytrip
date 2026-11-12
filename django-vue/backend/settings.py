@@ -58,15 +58,18 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'django.middleware.common.CommonMiddleware',
 ]
 
 CORS_ALLOWED_ORIGINS = [
-    "https://daytrip-kappa.vercel.app"
+    "https://daytrip-kappa.vercel.app",
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
 ]
 
 CSRF_TRUSTED_ORIGINS = [
     "https://daytrip-kappa.vercel.app",
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
 ]
 
 ROOT_URLCONF = 'backend.urls'
