@@ -1,4 +1,5 @@
 from django.db import models
+from django.core.validators import MinValueValidator, MaxValueValidator
 import string
 import random
 
@@ -12,11 +13,11 @@ def generate_unique_code():
             return code
 
 class Daytrip(models.Model):
-    #user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='itineraries')
+    # user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='itineraries')
     title = models.CharField(max_length=32)
     desc = models.TextField(blank=True)
     date = models.DateField()
-    #host = models.CharField(max_length=32)
+    # host = models.CharField(max_length=32)
     code = models.CharField(max_length=10, unique=True, primary_key=True,default=generate_unique_code)
 
 class Activity(models.Model):
@@ -26,13 +27,28 @@ class Activity(models.Model):
         related_name='activities',
         to_field='code'
     )
+
     name = models.CharField(max_length=128)
+    
+    ## location details
     location = models.TextField(blank=True)
     lat = models.FloatField(null=True, blank=True)
     lng = models.FloatField(null=True, blank=True)
+
+    opens_at = models.TimeField(null=True, blank=True)
+    closes_at = models.TimeField(null=True, blank=True)
+
+    # time logistics
     start_time = models.TimeField(null=True, blank=True)
-    #end_time = models.TimeField(null=True, blank=True)
-    #duration = models.DurationField(null=True, blank=True)
+    duration_min = models.PositiveIntegerField(default=60, validators=[MinValueValidator(1), MaxValueValidator(1440)])
+
+    # other
+    class Priority(models.TextChoices):
+        MUST = "MUST", "Must visit"
+        WANT = "WANT", "Want to visit"
+        OPTIONAL = "OPT", "Visit if able"
+
+    priority = models.CharField(max_length=4, choices=Priority.choices, default=Priority.OPTIONAL)
     note = models.TextField(blank = True)
 
 class Attendee(models.Model):
