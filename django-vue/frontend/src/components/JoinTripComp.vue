@@ -21,8 +21,7 @@ async function getDaytrip() {
 
 <template>
     <div>
-        <p class="font-serif text-2xl">View Daytrip</p>
-        <p class="text-left font-semibold">Invite Code:</p>
+        <p class="text-left font-bold">Invite Code:</p>
         <form @submit.prevent="getDaytrip">
             <Input required type="text" v-model="code" />
             <div class="mt-3 flex justify-center">

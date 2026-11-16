@@ -24,6 +24,7 @@
 <script setup>
 import { ref } from 'vue'
 import axios from 'axios'
+import router from '@/router'
 
 const form = ref({
   title: '',
@@ -41,8 +42,8 @@ async function submitDaytrip() {
       date: form.value.date,
       desc: form.value.description,
     })
-
     message.value = 'Itinerary created with Invite Code: ' + response.data.code
+    router.push(`/daytrip/${response.data.code}`)
   } catch (error) {
     message.value = 'Error: ' + (error.response?.data?.detail || error.message)
   }
