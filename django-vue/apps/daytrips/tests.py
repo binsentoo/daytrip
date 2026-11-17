@@ -323,9 +323,6 @@ class BuildRouteTests(SimpleTestCase):
         self.assertEqual(order, [1])
         self.assertEqual(unplaced, [0])
 
-    def test_visit_may_end_exactly_at_end_of_day(self):
-        pass #TODO
-
     def test_empty_input(self):
         order, unplaced = planner.build_route([], [], 540, 1260)
 
