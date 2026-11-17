@@ -1,5 +1,5 @@
 from django.test import SimpleTestCase
-from . import planner
+from apps.daytrips import planner
 
 class DistanceMatrixTests(SimpleTestCase):
     def line_stops(self):
@@ -300,8 +300,58 @@ class BuildRouteTests(SimpleTestCase):
         self.assertEqual(sorted(unplaced), [2, 3])
         self.assertIsNotNone(planner.walk(order, stops, matrix, 540, 680))
 
+    def test_visit_may_end_exactly_at_end_of_day(self):
+        pass #TODO
+
     def test_empty_input(self):
         order, unplaced = planner.build_route([], [], 540, 1260)
 
         self.assertEqual(order, [])
         self.assertEqual(unplaced, [])
+
+class BestInsertionTests(SimpleTestCase):
+    def test_empty_route(self):
+        stops = [make_stop("A", duration=60)]
+        result = planner.best_insertion([], 0, stops, flat_matrix(1, 10), 540, 1260)
+
+        self.assertEqual(result, (0, 600))
+
+    def test_picks_the_earliest_finish(self):
+        # Stop 1 opens at 600. Before stop 0: waits, ends 660, then stop 0 ends 730.
+        # After stop 0: stop 0 ends 600, stop 1 arrives 610, ends 670.
+        stops = [
+            make_stop("A", duration=60),
+            make_stop("B", duration=60, opens=600),
+        ]
+        route = [0]
+        result = planner.best_insertion(route, 1, stops, flat_matrix(2, 10), 540, 1260)
+
+        self.assertEqual(result, (1, 670))
+        self.assertEqual(route, [0])  # the caller's list is untouched
+
+    def test_skips_infeasible_positions(self):
+        # Stop 1 closes at 600, so it only works first: 540-600, then stop 0 ends 670.
+        stops = [
+            make_stop("A", duration=60),
+            make_stop("B", duration=60, closes=600),
+        ]
+        result = planner.best_insertion([0], 1, stops, flat_matrix(2, 10), 540, 1260)
+
+        self.assertEqual(result, (0, 670))
+
+    def test_returns_none_when_nothing_fits(self):
+        # Stop 1 closes at 560, but a 60-minute visit starting at 540 ends at 600.
+        stops = [
+            make_stop("A", duration=60),
+            make_stop("B", duration=60, closes=560),
+        ]
+        result = planner.best_insertion([0], 1, stops, flat_matrix(2, 10), 540, 1260)
+
+        self.assertIsNone(result)
+
+    def test_tie_goes_to_the_earlier_position(self):
+        # Two identical stops finish at 670 in either order, so the front wins.
+        stops = [make_stop("A", duration=60), make_stop("B", duration=60)]
+        result = planner.best_insertion([0], 1, stops, flat_matrix(2, 10), 540, 1260)
+
+        self.assertEqual(result, (0, 670))
