@@ -300,6 +300,29 @@ class BuildRouteTests(SimpleTestCase):
         self.assertEqual(sorted(unplaced), [2, 3])
         self.assertIsNotNone(planner.walk(order, stops, matrix, 540, 680))
 
+    def test_two_musts_both_fit(self):
+        stops = [
+            make_stop("A", duration=30, priority="MUST"),
+            make_stop("B", duration=30, priority="MUST"),
+        ]
+        order, unplaced = planner.build_route(stops, flat_matrix(2, 10), 540, 1260)
+
+        self.assertEqual(sorted(order), [0, 1])
+        self.assertEqual(unplaced, [])
+
+    def test_tighter_closing_must_wins_a_conflict(self):
+        # Day is 540 to 640. Both stops take 60 minutes, so they cannot both fit
+        # (the second would end at 670). Stop 1 closes at 600, so it has fewer options
+        # and gets placed first: 540-600. Stop 0 then fits nowhere.
+        stops = [
+            make_stop("A", duration=60, priority="MUST"),
+            make_stop("B", duration=60, closes=600, priority="MUST"),
+        ]
+        order, unplaced = planner.build_route(stops, flat_matrix(2, 10), 540, 640)
+
+        self.assertEqual(order, [1])
+        self.assertEqual(unplaced, [0])
+
     def test_visit_may_end_exactly_at_end_of_day(self):
         pass #TODO
 

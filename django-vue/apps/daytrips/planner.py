@@ -80,49 +80,54 @@ def best_insertion(route, candidate_index, stops, matrix, day_start, day_end):
             best = (position, finish)
 
     return best
-"""
-The range. Inserting into a route of length 3 has more than 3 possible positions. Count them, including both ends, and write the upper bound of range to match. The empty route must give exactly one position.
-Never edit route. Slicing builds a new list each time (route[:position] and route[position:]), so the caller’s list stays untouched.
-The tie rule. A strict “less than” when you compare against the best so far keeps the first of several equal positions. Think about what <= would do instead.
-What walk gives you. It returns None or (finish, legs), so you need to unpack it before comparing finish times.
 
-Step 2: a helper, best_insertion
+def build_route(stops, matrix, day_start, day_end):
+    order = []
+    remaining = []
+    unplaced = []
 
-Write this one first and test it by hand. 
-Given the current route (a list of indexes) and one candidate index, 
-it tries the candidate at every position, from the front to the back. 
-For each position it builds that ordering and calls walk. 
-It returns the feasible position with the earliest finish, 
-along with that finish time, or None if no position works.
+    must_stops = [] # store indices
 
-Three details:
+    for index in range(len(stops)):
+        if stops[index]["priority"] == MUST:
+            must_stops.append(index)
+        else:
+            remaining.append(index)
 
-Build a new list for each attempt (route[:pos] + [candidate] + route[pos:]),
-    and never edit the route you were given.
-Break ties deterministically. 
-If two positions finish at the same time, 
-keep the earlier one by using a strict “less than” when you compare.
-The empty route has to work. Trying position 0 on [] should give you the one-stop route.
+    must_stops.sort(key=lambda i: (stops[i]["closes_min"] is None, stops[i]["closes_min"] or 0))
 
-Step 3: the must-dos
+    # place MUST stops
+    for index in must_stops:
+        result = best_insertion(order, index, stops, matrix, day_start, day_end)
 
-Collect the MUST indexes and sort them by closing time, with None (no closing time) last.
-For each one, call best_insertion. If you get a position, insert it. If you get None, add it to unplaced.
+        if result is None:
+            unplaced.append(index)
+        else:
+            order.insert(result[0], index)
 
-Think about why closing time is the sort key. It only changes the outcome when two musts compete for the same space.
+    # attempt to place other stops (using scoring based on extra minutes added. priority_weight/extra minutes)
+    while True:
+        best = None
+        current_finish, _ = walk(order, stops, matrix, day_start, day_end)
+        for index in remaining:
+            result = best_insertion(order, index, stops, matrix, day_start, day_end)
 
-Step 4: the rest, one at a time
+            if result is None:
+                continue
 
-Repeat this loop until a pass adds nothing:
+            position, new_finish = result
+            extra = max(new_finish - current_finish, 1)
+            score = PRIORITY_WEIGHT[stops[index]["priority"]] / extra
 
-For every remaining non-must stop, call best_insertion. Skip it if the answer is None.
-The score is its weight divided by the extra minutes, where extra means (finish with it) minus (the current route’s finish). The finish of an empty route is day_start, and walk([]) already gives you that.
-Guard against a zero or negative extra before dividing. A stop can add no time at all (a free gap before a late-opening stop), and dividing by zero would crash.
-Insert the highest-scoring stop, and keep the first one on a tie, so results are the same every run.
-When no remaining stop has a feasible insertion, stop.
+            if best is None or score > best[0]:
+                best = (score, index, position, new_finish)
 
-Whatever is left, plus any musts that failed, is unplaced.
+        if best is None:
+            break
 
-Step 5: return (order, unplaced)
+        _, index, position, _ = best
+        remaining.remove(index)
+        order.insert(position, index)
 
-Both are lists of indexes into the original stops. The invariant to keep in mind: every index appears in exactly one of the two lists, which is what test_every_stop_is_placed_or_reported checks."""
+    unplaced.extend(remaining)
+    return (order, unplaced)
