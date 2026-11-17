@@ -375,3 +375,49 @@ class BestInsertionTests(SimpleTestCase):
         result = planner.best_insertion([0], 1, stops, flat_matrix(2, 10), 540, 1260)
 
         self.assertEqual(result, (0, 670))
+
+class ImproveRouteTests(SimpleTestCase):
+    def test_reversal_shortens_the_day(self):
+        # Going from stop 1 to stop 2 takes 50 minutes, but 2 to 1 takes only 10.
+        # [0, 1, 2]: 540-570, +10, 580-610, +50, 660-690. Finish 690.
+        # [0, 2, 1]: 540-570, +10, 580-610, +10, 620-650. Finish 650.
+        stops = [make_stop(name, duration=30) for name in "ABC"]
+        matrix = [[0, 10, 10], [10, 0, 50], [10, 10, 0]]
+        route = [0, 1, 2]
+
+        result = planner.improve_route(route, stops, matrix, 540, 1260)
+
+        finish, _ = planner.walk(result, stops, matrix, 540, 1260)
+        self.assertEqual(finish, 650)
+        self.assertEqual(sorted(result), [0, 1, 2])
+        self.assertEqual(route, [0, 1, 2])  # the caller's list is untouched
+
+    def test_best_route_is_left_alone(self):
+        # [0, 2, 1] already finishes at 650, and no reversal does strictly better.
+        stops = [make_stop(name, duration=30) for name in "ABC"]
+        matrix = [[0, 10, 10], [10, 0, 50], [10, 10, 0]]
+
+        result = planner.improve_route([0, 2, 1], stops, matrix, 540, 1260)
+
+        self.assertEqual(result, [0, 2, 1])
+
+    def test_infeasible_improvement_is_rejected(self):
+        # [1, 0] would finish earlier (605 against 650), but stop A closes at 570,
+        # and in [1, 0] it would not be reached until 575.
+        stops = [
+            make_stop("A", duration=30, closes=570),
+            make_stop("B", duration=30),
+        ]
+        matrix = [[0, 50], [5, 0]]
+
+        result = planner.improve_route([0, 1], stops, matrix, 540, 1260)
+
+        self.assertEqual(result, [0, 1])
+
+    def test_empty_and_single_stop_routes(self):
+        self.assertEqual(planner.improve_route([], [], [], 540, 1260), [])
+
+        stops = [make_stop("A")]
+        self.assertEqual(
+            planner.improve_route([0], stops, flat_matrix(1, 10), 540, 1260), [0]
+        )

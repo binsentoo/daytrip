@@ -105,29 +105,64 @@ def build_route(stops, matrix, day_start, day_end):
         else:
             order.insert(result[0], index)
 
-    # attempt to place other stops (using scoring based on extra minutes added. priority_weight/extra minutes)
+    
     while True:
-        best = None
-        current_finish, _ = walk(order, stops, matrix, day_start, day_end)
-        for index in remaining:
-            result = best_insertion(order, index, stops, matrix, day_start, day_end)
+        while True: # attempt to place other stops (using scoring based on extra minutes added. priority_weight/extra minutes)
+            best = None
+            current_finish, _ = walk(order, stops, matrix, day_start, day_end)
+            for index in remaining:
+                result = best_insertion(order, index, stops, matrix, day_start, day_end)
 
-            if result is None:
-                continue
+                if result is None:
+                    continue
 
-            position, new_finish = result
-            extra = max(new_finish - current_finish, 1)
-            score = PRIORITY_WEIGHT[stops[index]["priority"]] / extra
+                position, new_finish = result
+                extra = max(new_finish - current_finish, 1)
+                score = PRIORITY_WEIGHT[stops[index]["priority"]] / extra
 
-            if best is None or score > best[0]:
-                best = (score, index, position, new_finish)
+                if best is None or score > best[0]:
+                    best = (score, index, position, new_finish)
 
-        if best is None:
+            if best is None:
+                break
+
+            _, index, position, _ = best
+            remaining.remove(index)
+            order.insert(position, index)
+
+        # try to improve and compare
+        improved_order = improve_route(order, stops, matrix, day_start, day_end)
+
+        if improved_order == order:
             break
 
-        _, index, position, _ = best
-        remaining.remove(index)
-        order.insert(position, index)
+        order = improved_order
 
     unplaced.extend(remaining)
     return (order, unplaced)
+
+# tries to shorten an already feasible route (2-opt idea)
+def improve_route(order, stops, matrix, day_start, day_end):
+    best = order[:]
+    best_finish, _ = walk(best, stops, matrix, day_start, day_end)
+
+    improved = True
+    while improved:
+        improved = False
+        for i in range(len(best) - 1):
+            for j in range(i + 1, len(best)):
+                candidate = best[:i] + best[i:j + 1][::-1] + best[j + 1:]
+
+                result = walk(candidate, stops, matrix, day_start, day_end)
+
+                if result is None:
+                    continue
+
+                finish, _ = result
+
+                if finish < best_finish:
+                    best_finish = finish
+                    best = candidate
+                    improved = True
+
+    return best
