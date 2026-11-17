@@ -1,5 +1,6 @@
 import math
 from haversine import haversine
+from datetime import time
 
 MUST = "MUST"
 WANT = "WANT"
@@ -166,3 +167,67 @@ def improve_route(order, stops, matrix, day_start, day_end):
                     improved = True
 
     return best
+
+def plan_day(stops, matrix, day_start, day_end):
+    order, unplaced = build_route(stops, matrix, day_start, day_end)
+    finish, legs = walk(order, stops, matrix, day_start, day_end)
+
+    plan = []
+
+    prev_depart_time = day_start
+    for index, leg in zip(order, legs):
+        stop = stops[index]
+
+        plan.append({
+            "id": stop["id"],
+            "name": stop["name"],
+            "arrive_time": leg["arrive_time"],
+            "start_time": leg["start_time"],
+            "depart_time": leg["depart_time"],
+            "travel_min": leg["arrive_time"] - prev_depart_time, 
+            "wait_min": leg["start_time"] - leg["arrive_time"],
+        })
+
+        prev_depart_time = leg['depart_time']
+
+    dropped = []
+
+    for index in sorted(unplaced):
+        stop = stops[index]
+
+        alone = walk([index], stops, matrix, day_start, day_end)
+
+        if alone is None:
+            reason = "Does not fit its opening hours inside the planning day."
+        else:
+            reason = "No room left in the schedule."
+
+        dropped.append({
+            "id": stop["id"],
+            "name": stop["name"],
+            "priority": stop["priority"],
+            "reason": reason,
+        })
+
+    return {
+        "plan": plan,
+        "dropped": dropped,
+        "total_travel_min": sum(x["travel_min"] for x in plan),
+        "finish": finish,
+    }
+
+# HELPER FUNCTIONS
+def time_to_minutes(datetime):
+    if not datetime:
+        return None
+
+    return datetime.hour * 60 + datetime.minute
+
+def minutes_to_time(total_minutes):
+    total_minutes = total_minutes % 1440
+
+    hours = int(total_minutes // 60)
+    remaining_minutes = total_minutes % 60
+    minutes = int(remaining_minutes)
+
+    return time(hours, minutes)

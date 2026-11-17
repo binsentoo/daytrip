@@ -421,3 +421,61 @@ class ImproveRouteTests(SimpleTestCase):
         self.assertEqual(
             planner.improve_route([0], stops, flat_matrix(1, 10), 540, 1260), [0]
         )
+
+class PlanDayTests(SimpleTestCase):
+    def test_empty(self):
+        result = planner.plan_day([], [], 540, 1260)
+
+        self.assertEqual(result, {"plan": [], "dropped": [], "total_travel_min": 0, "finish": 540})
+
+    def test_entry_shows_travel_and_wait(self):
+        # A: 540-570. Travel 10, B arrives 580 but opens at 600, so it waits 20 and ends 660.
+        stops = [
+            make_stop("A", duration=30),
+            make_stop("B", duration=60, opens=600),
+        ]
+        result = planner.plan_day(stops, flat_matrix(2, 10), 540, 1260)
+
+        first, second = result["plan"]
+        self.assertEqual((first["travel_min"], first["wait_min"]), (0, 0))
+        self.assertEqual(second["travel_min"], 10)
+        self.assertEqual(second["arrive_time"], 580)
+        self.assertEqual(second["wait_min"], 20)
+        self.assertEqual(second["depart_time"], 660)
+        self.assertEqual(result["total_travel_min"], 10)
+        self.assertEqual(result["finish"], 660)
+
+    def test_reason_when_stop_can_never_fit(self):
+        # The visit would end at 600, but the stop closes at 560.
+        stops = [make_stop("A", duration=60, closes=560)]
+        result = planner.plan_day(stops, flat_matrix(1, 10), 540, 1260)
+
+        self.assertEqual(result["plan"], [])
+        self.assertEqual(result["dropped"][0]["id"], "A")
+        self.assertIn("opening hours", result["dropped"][0]["reason"])
+
+    def test_reason_when_no_room_left(self):
+        # Same budget case as before: only B and C fit in 540 to 680.
+        stops = [
+            make_stop("A", priority="OPT"),
+            make_stop("B", priority="MUST"),
+            make_stop("C", priority="WANT"),
+        ]
+        result = planner.plan_day(stops, flat_matrix(3, 10), 540, 680)
+
+        self.assertEqual([d["id"] for d in result["dropped"]], ["A"])
+        self.assertIn("No room", result["dropped"][0]["reason"])
+
+    def test_every_stop_is_planned_or_dropped(self):
+        stops = [make_stop(name, priority="WANT") for name in "ABCD"]
+        result = planner.plan_day(stops, flat_matrix(4, 10), 540, 700)
+
+        ids = [e["id"] for e in result["plan"]] + [d["id"] for d in result["dropped"]]
+        self.assertEqual(sorted(ids), ["A", "B", "C", "D"])
+
+class TimeHelperTests(SimpleTestCase):
+    def test_round_trip(self):
+        from datetime import time
+        self.assertEqual(planner.time_to_minutes(time(9, 30)), 570)
+        self.assertIsNone(planner.time_to_minutes(None))
+        self.assertEqual(planner.minutes_to_time(570), time(9, 30))
